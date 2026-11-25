@@ -44,12 +44,13 @@ async fn main() {
         Position(vec2(100.0, 100.0)),
         Hitbox(vec2(50.0, 50.0)),
         recursos.player_sheet,
+        recursos.player_animatedsprite,
         Jugador
     ));
 
     loop {
         // Actualizar
-
+        sistemas::sis_actualizar(&mut world);
 
         set_camera(&camara2d);
         clear_background(LIGHTGRAY);

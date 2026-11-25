@@ -1,22 +1,12 @@
 use futures::future::join_all;
 use macroquad::audio::{Sound, load_sound};
+use macroquad::experimental::animation::{self, AnimatedSprite, Animation};
 
 use crate::*;
 
-pub struct AnimacionDatos {
-    pub texture: Texture2D,
-    pub colas: f32,
-    pub filas: f32
-}
-
-impl AnimacionDatos {
-    fn new(t: Texture2D, c: f32, f: f32) -> Self {
-        Self { texture: t, colas: c, filas: f }
-    }
-}
-
 pub struct Recursos {
-    pub player_sheet: AnimacionDatos
+    pub player_sheet: Texture2D,
+    pub player_animatedsprite: animation::AnimatedSprite
 }
 
 impl Recursos {
@@ -27,7 +17,19 @@ impl Recursos {
         let sprites_cargados = Self::cargar_texturas(rutas_sprites).await;
 
         Self {
-            player_sheet: AnimacionDatos::new(sprites_cargados[0].clone(), sprites_cargados[0].width() / 32.0, sprites_cargados[0].height() / 32.0)
+            player_sheet: sprites_cargados[0].clone(),
+            player_animatedsprite: AnimatedSprite::new(
+                32, 32,
+                &[
+                    Animation {
+                        name: "idle".to_string(),
+                        row: 0,
+                        frames: 6,
+                        fps: 12
+                    }
+                ],
+                true // Loop
+            )
         }
     }
     pub async fn cargar_texturas(rutas: Vec<&str>) -> Vec<Texture2D> {
